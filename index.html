@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es"> <!--Configuración del idioma-->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> I-CC-IA - pagina web</title> <!--Nombre principal de la pagina-->
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/estilos.css">
+</head>
+<body>
+   
+<!-- 1 Parte de imagen principal y titulos principales-->
+    <header class="hero">
+       <nav class="nav container"> <!-- Menu de navegacion con margen-->
+            <div class="nav__logo"> <!-- Etiqueta nav: 3 elementos hijos. Nav logo-->
+                <h2 class="nav__title">I-CC-IA - pagina web.</h2> 
+            </div>
+
+            <ul class="nav__link nav__link--menu"> <!--Nav link-->
+                <li class="nav__items">
+                    <a href="#" class="nav__links">Inicio</a>
+                </li>
+
+                <li class="nav__items">
+                    <a href="https://juliana24712.github.io/El-Universo-expresa-una-gran-red-neuronal/" target="_blank" class="nav__links">El Universo expresa una gran red neuronal</a>
+                </li>
+
+                <li class="nav__items">
+                    <a href="https://juliana24712.github.io/An-lisis-de-red-neuronal/" target="_blank" class="nav__links">Análisis de Red neuronal</a>
+                </li>
+
+                <li class="nav__items">
+                    <a href="https://juliana24712.github.io/viaje-por-teachable-machine/" target="blank" class="nav__links">Viaje por teachable machine</a>
+                </li>
+
+                <img src="./images/close.svg" class="nav__close" alt="">
+            </ul>
+
+            <div class="nav__menu"> <!--Nav menu-->
+                <img src="./images/menu.svg" class="nav_img" alt="">
+            </div>
+       </nav>
+
+       <section class="hero__container container">
+        <h1 class="hero__title">Clasificación de imágenes, posturas y sonidos.</h1>
+        
+        <p class="hero__paragraph" align="justify">Esta página web muestra El Universo y como expresa una gran red neuronal. A través de teachable machine se realiza la creación de modelos de aprendizaje automático sobre Jesús, José y María. Adicionalmente, se presenta el análisis de una Red neuronal artificial. Y se manifiestan datos interesantes sobre el idioma irlandés y Shalom la palabra típica de la cultura Israelí que muestra el mensaje de Vida, Verdad y Sabiduría de Jesús</p>       
+
+
+
+        <a href="https://juliana24712.github.io/An-lisis-de-red-neuronal/" class="cta">¿Qué hace posible todo esto? Red Neuronal artificial, imitado e inspirado del funcionamiento neuronal del ser humano</a>
+       </section>
+       
+    </header>
+
+<!-- 2 Parte de explicacion sobre clasificaciones y aprendizaje-->
+    <main>
+        <!-- Boton para agregar una imagen-->
+        <section class="container about">
+           <h2 class="subtitle"> CLASIFICACIÓN DE IMÁGENES, SONIDOS Y POSTURAS</h2>
+           <p class="about__paragraph">Machine Learning es el proceso en el cual un computador resuelve problemas y toma decisiones de la misma manera que lo hacen los humanos a partir de datos precisos y que posean una adecuada relación. (Serrano, 2021, p. 25).  En este sentido, se realizará un modelo de Machine Learning en Tachable Machine para clasificar imágenes, sonidos y posturas. </p>
+           <div class="about__main">
+                <article class="about__icons">
+                    <img src="./images/Sun.svg" class="about__icon" >
+                   
+                    <!-- LINK PARA JUEGO ALEATORIO -->
+
+                    <a class="Jesús"href="https://canonic-armor.000webhostapp.com/" target="_blank"><strong>   <p class="about__paragraph" align="justify" > Clasificación de imágenes: En este modelo de clasificación de imágenes el usario recibe un personaje aleatorio dando clic en el botón "Clasificación de imágenes. Luego, elige una foto sobre este personaje y lo muestra en cámara. El modelo confirma si ese es el personaje con una frase o característica del personaje. </p>          </strong>
+                    </a>
+                    <!--<h3 class="about__ title">Clasificacion de imagenes</h3>-->
+
+
+                    <!--    CODIGO DE TEACHABLE MACHINE PARA CLASIFICAR IMAGENES -->
+                    <div>Teachable Machine Image Model</div>
+                    <button type="button" onclick="init()">Start</button>
+                    <div id="webcam-container"></div>
+                    <div id="label-container"></div>
+                    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+                    <script type="text/javascript">
+                        // More API functions here:
+                        // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+                    
+                        // the link to your model provided by Teachable Machine export panel
+                        const URL = "https://teachablemachine.withgoogle.com/models/Opwxws8RI/";
+                    
+                        let model, webcam, labelContainer, maxPredictions;
+                    
+                        // Load the image model and setup the webcam
+                        async function init() {
+                            const modelURL = URL + "model.json";
+                            const metadataURL = URL + "metadata.json";
+                    
+                            // load the model and metadata
+                            // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+                            // or files from your local hard drive
+                            // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+                            model = await tmImage.load(modelURL, metadataURL);
+                            maxPredictions = model.getTotalClasses();
+                    
+                            // Convenience function to setup a webcam
+                            const flip = true; // whether to flip the webcam
+                            webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
+                            await webcam.setup(); // request access to the webcam
+                            await webcam.play();
+                            window.requestAnimationFrame(loop);
+                    
+                            // append elements to the DOM
+                            document.getElementById("webcam-container").appendChild(webcam.canvas);
+                            labelContainer = document.getElementById("label-container");
+                            for (let i = 0; i < maxPredictions; i++) { // and class labels
+                                labelContainer.appendChild(document.createElement("div"));
+                            }
+                        }
+                    
+                        async function loop() {
+                            webcam.update(); // update the webcam frame
+                            await predict();
+                            window.requestAnimationFrame(loop);
+                        }
+                    
+                        // run the webcam image through the image model
+                        async function predict() {
+                            // predict can take in an image, video or canvas html element
+                            const prediction = await model.predict(webcam.canvas);
+                            for (let i = 0; i < maxPredictions; i++) {
+                                const classPrediction =
+                                    prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+                                labelContainer.childNodes[i].innerHTML = classPrediction;
+                            }
+                        }
+                    </script>
+                    
+                    <!-- TERMINACION DE CODIGO DE TEACHABLE MACHINE PARA CLASIFICACION DE IMAGENES -->
+                    
+                 
+
+                </article>
+
+                <article class="about__icons">
+                    <img src="./images/Castle.svg" class="about__icon" >
+                    <!--<h3 class="about__title">Clasificacion de sonidos</h3>-->
+                    <a class="btn"href="https://teachablemachine.withgoogle.com/models/NU4p7irln/" target="_blank"><strong> <p class="about__paragraph" align="justify"> Clasificacion de sonidos: En este modelo de clasificación de sonidos, el usuario puede elegir entre saludar en idioma irlandés gaélico pronunciando "Dia duit que sigifica Dios este contigo o Dia Muire duit que significa Dios y María esten contigo " o pronunciado una palabra hebrea "Shalom "bastante conocida en Israel, que, por cierto, es donde nace Jesús. Esta palabra Shalom puede significar la Paz, es decir, ausencia de conflicto  o la presencia de algo mejor en su lugar. En el antiguo testamento se pronuncia Shalom, pero en el Nuevo testamente Eirene. Shalom se puede referir a una roca perfecta y completa, una pared o muro sin espacios vacíos ni ladrillos faltantes, estado completo o pleno como Job se refería a sus tierras en Shalom o el Nacimiento de Jesús que se anuncia como la llegada de Eirene. </p>   </strong></a>
+
+                    
+                    
+                </article>
+
+                <article class="about__icons">
+                    <img src="./images/Hand.svg" class="about__icon" >
+                    <!--<h3 class="about__title">Clasificacion de posturas</h3>-->
+                    <a class="cdp" href="https://teachablemachine.withgoogle.com/models/mgdGOy2PE/" target="_blank">  <strong> <p class="about__paragraph" align="justify">Clasificación de posturas: En este modelo de clasificación de posturas, el usuario puede elegir entre dos posiciones, la posición 1 inclinación de la cabeza a la derecha y la segunda posición brazo derecho arriba. Menciona teachable machine que para enseñar a un modelo a clasificar posturas corporales, se puede usar archivos o adoptar posturas llamativas delante de tu webcam. Asi mismo, teachable machine presenta posturas como el árbol, alas, sentadilla o persona de pie, o inclinación de la cabeza. <p>            </strong> </a>
+
+
+                    
+
+                </article>
+            </div>
+        </section> 
+
+        <!-- 3 Parte para explicacion de teachable machine -->
+        <section class="knowledge">
+            <div class="knowledge__container container">
+                <div class="knowledge__texts">
+                    <h2 class="subtitle">Machine learning</h2>
+                    
+                    <p class="knowledge__paragraph" align="justify"> El conjunto de tareas en que un computador toma decisiones basadas en datos.(Serrano L, 2021, p.). 
+
+                        Vocabulario
+                        <b> Model </b> Un conjunto de reglas que representan nuestros datos y se pueden usar para hacer predicciones. 
+                       
+                        <b> Algoritmo </b> Un procedimiento o conjunto de pasos usados para resolver un problema o realizar un calculo. El objetivo del algoritmo es construir un modelo.
+
+                        </p>
+
+                    <h4 class="subtitle"> Referencias bibliográficas</h4>
+                    <a href="https://drive.google.com/file/d/1-JtQRjNofPDx1HO9DqUIkIYEYfHIMtnc/view?usp=sharing" class="cta">Fuente Grokking machine learning</a> <br> 
+
+                    <a href="https://www.ibm.com/docs/es/spss-modeler/saas?topic=networks-neural-model" class="cta"> Fuente IBM </a> <br>
+
+                    <a href="https://www.xeridia.com/blog/redes-neuronales-artificiales-que-son-y-como-se-entrenan-parte-i" class="cta">Fuente Red Neuronal artificial ¿Cómo se entrenan? tomado de xeridia </a> <br>
+
+                </div>
+
+                <figure>
+                    <img src="./images/imagenmachinelearning.jpg" class="knowledge__img
+                    "alt="">
+                </figure>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
